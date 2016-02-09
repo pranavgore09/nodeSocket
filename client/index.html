@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>NodeJs Client</title>
+    <script src="lib/socket.io-1.4.5.js"></script>
+    <script src="lib/jquery.2.2.0.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <script type="text/javascript">
+    var socket = io('http://localhost:8181');
+    socket.on('connect', function() {
+        console.log('connected');
+    });
+    socket.on('message', function(data) {
+        console.log('received', data);
+        if(data['total_connections']){
+        	cnt = data['total_connections'];
+        	document.getElementById('total_connections').innerHTML = 'Connections in room :' + cnt;
+        }
+    });
+    socket.on('connect_error', function(err) {
+        console.log('Error in connection.', err);
+    });
+
+    function join_india() {
+        socket.emit('india', {});
+    }
+
+    function leave_india() {
+        socket.emit('leave', {});
+        document.getElementById('total_connections').innerHTML = 'Not connected to room';
+    }
+    </script>
+</head>
+
+<body>
+    <div class="row">
+	    <div class="col-sm-offset-4 col-sm-3 text-center">
+	        <div class="btn-group" data-toggle="buttons">
+	            <button class="btn-lg btn btn-primary center-block" onclick="join_india()">Join room</button>
+	            <button class="btn-lg btn btn-default active center-block" onclick="leave_india()">Leave Room</button>
+	        </div>
+	    </div>
+	</div>
+	<div class="row">
+		<div class="col-sm-offset-4 col-sm-3 text-center">
+			<div class="btn-group" data-toggle="buttons">
+	            <label id='total_connections'>Not connected to room</label>
+	        </div>
+		</div>
+	</div>
+</body>
+
+</html>
