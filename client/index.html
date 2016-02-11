@@ -13,7 +13,7 @@
     });
     socket.on('message', function(data) {
         console.log('received', data);
-        if(data['total_connections']){
+        if(!!data['total_connections']){
         	cnt = data['total_connections'];
         	document.getElementById('total_connections').innerHTML = 'Connections in room :' + cnt;
         }
@@ -23,7 +23,7 @@
     });
 
     function join_india() {
-        socket.emit('india', {});
+        socket.emit('join', {});
     }
 
     function leave_india() {
